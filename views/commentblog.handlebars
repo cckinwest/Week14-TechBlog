@@ -1,0 +1,78 @@
+<div>
+    <div class="card bg-secondary text-bg-primary rounded p-3 m-1 border border-info" id="blog-detail">
+        <h3 class="blog-title fw-bold font-monospace fs-2">{{blog.title}}</h4>
+        <p class="blog-content fst-normal fs-5">{{blog.content}}</p>
+        <p class="creator fst-italic fs-6">Created by {{blog.user.username}} <span class="blog-date fw-light">on {{blog.createdAt}}</span></p>
+    </div>
+
+    {{#each blog.comments as |comment|}}
+    <div class="card rounded-4 p-3 m-2 bg-light" id="comment{{comment.id}}">
+        <p class="comment-content fst-normal fs-6">{{comment.content}}</p>
+        <p class="comment-creator fst-italic fs-6">By {{comment.user.username}} <span class="comment-date fw-light">on {{comment.createdAt}}</span></p>
+    </div>
+    {{/each}}
+
+    <div>        
+        <div class="card p-3 mb-3" id="commentInput" style="display:none;">            
+            <label class="commentText col-sm-2 col-form-label" for="commentcontentInput">Content:</label>
+            <div class="col-sm-10">
+                <textarea id="commentcontentInput" class="form-control" rows="2" cols="50"></textarea>
+            </div>            
+        </div>
+            
+        <button class="btn btn-outline-secondary" id="addCommentBtn" onClick="addComment({{blog.id}}, '{{expires}}', {{loggedIn}})">New Comment</button>    
+    </div>    
+</div>
+
+<script>
+
+    async function addComment(blogId, expires, loggedIn) {
+        const expireTime = new Date(expires).getTime();
+        const currentTime = new Date().getTime();
+
+        IsExpire = (currentTime >= expireTime) 
+
+        if (!IsExpire && loggedIn) {                
+            const btn = document.querySelector(`#addCommentBtn`)
+
+            if (btn.textContent === 'New Comment') {
+                document.querySelector(`#commentInput`).style.display = 'block';
+                btn.textContent = 'Add Comment';
+                return;
+            }
+
+            if (btn.textContent === 'Add Comment') {
+                
+                const commentContent = document.querySelector(`#commentcontentInput`).value;
+                console.log(commentContent);
+
+                const response = await fetch('/api/comments/', {
+                    method: 'POST',
+                    body: JSON.stringify({
+                        content: commentContent,
+                        blogId: blogId, 
+                    }),
+                    headers: {
+                        'Content-Type': 'application/json',
+                    }
+                })
+
+                if (response.ok) {
+                    document.querySelector(`#commentcontentInput`).value = '';
+
+                    document.querySelector(`#commentInput`).style.display = 'none';
+                    btn.textContent = 'New Comment';
+
+                    location.replace(`/blog/${blogId}`)
+                    return;
+                }            
+            }
+
+        } else {
+            alert('The session is expired! Please login again!');
+        }
+
+        location.replace('/login')
+    }
+
+</script>

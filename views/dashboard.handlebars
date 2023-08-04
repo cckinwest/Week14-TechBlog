@@ -1,0 +1,94 @@
+<div>
+    <div>
+        <h3 class="user-name fw-bold font-monospace fs-2" id="user{{user.id}}">Hi, {{user.username}}! Here are your blogs.</h3>
+    </div>
+    
+    <div>
+        {{#each user.blogs as |blog|}}
+        <div class="card btn bg-secondary text-bg-primary rounded p-3 m-1" id="selfBlog{{id}}" onClick="goToUpdate({{id}})">
+            <h4 class="blog-title fw-bold font-monospace fs-2">{{title}}</h4>
+            <p class="blog-date fst-italic fs-6 fw-light">Created on {{createdAt}}</p>
+        </div>
+        {{/each}}
+    </div>
+
+    <br>
+
+        <div class="card p-3 mb-3" id="newPostInput" style="display: none;">
+            <div class="card-body">
+                <div class="form-group">
+                    <label class="titleText col-sm-2 col-form-label" for="titleInput">Title:</label>                
+                    <div class="col-sm-10">
+                        <input id="titleInput" type="text" class="form-control"/>
+                    </div>                    
+                </div>
+
+                <div class="form-group">            
+                    <label class="contentText col-sm-2 col-form-label" for="contentInput">Content:</label>                
+                    <div class="col-sm-10">
+                        <textarea id="contentInput" class="form-control" rows="2" cols="50"></textarea>
+                    </div>                    
+                </div>            
+            </div>            
+        </div>
+        <button class="btn btn-outline-secondary" id="addPostBtn", onClick="addPost('{{expires}}', {{loggedIn}})">New Post</button>        
+
+</div>
+
+<script>    
+    function goToUpdate(BlogId) {
+        location.replace(`/dashboard/blog/${BlogId}`)
+    }
+    
+    document.querySelector('#addPostBtn').addEventListener('click', addPost);
+
+    async function addPost (expires, loggedIn) {
+
+        const expireTime = new Date(expires).getTime();
+        const currentTime = new Date().getTime();
+
+        const IsExpire = (currentTime >= expireTime)
+
+        if (!IsExpire && loggedIn) {
+
+            const btn = document.querySelector(`#addPostBtn`)
+
+            if (btn.textContent === 'New Post') {
+                document.querySelector(`#newPostInput`).style.display = 'block';
+                btn.textContent = 'Add Post';
+                return;
+            }
+
+            if (btn.textContent === 'Add Post') {
+                
+                const title = document.querySelector('#titleInput').value;
+                const content = document.querySelector('#contentInput').value;
+
+                const response = await fetch('/api/blogs/', {
+                    method: 'POST',
+                    body: JSON.stringify({
+                        title,
+                        content, 
+                    }),
+                    headers: {
+                        'Content-Type': 'application/json',
+                    }
+                })
+
+                if (response.ok) {
+                    document.querySelector(`#newPostInput`).style.display = 'none';
+                    btn.textContent = 'New Post';                
+                    location.replace('/dashboard')
+                }
+
+                return;
+            }
+
+        } else {
+            alert('The session is expired! Please login again!')
+        }
+
+        location.replace('/login')
+    }    
+       
+</script>

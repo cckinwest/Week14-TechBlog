@@ -1,0 +1,19 @@
+<div>    
+    <div>
+        {{#each blogs as |blog|}}
+        <div class="card btn bg-secondary text-bg-primary rounded p-3 m-1" id="viewblog{{id}}" onClick="goToComment({{id}})">
+            <h4 class="blog-title fw-bold font-monospace fs-2">{{title}}</h4>
+            <p class="blog-date fst-italic fs-6 fw-light">Created on {{createdAt}}</p>
+        </div>
+        <br>
+
+        {{/each}}
+    </div>
+        
+</div>
+
+<script>
+    function goToComment(blogId) {
+        location.replace(`/blog/${blogId}`);
+    }
+</script>
