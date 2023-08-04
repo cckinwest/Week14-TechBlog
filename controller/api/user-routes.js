@@ -1,7 +1,7 @@
 const router = require("express").Router();
 const { User, Blog, Comment } = require("../../models");
 
-const minute = 60000;
+const minute = 300000;
 
 router.get("/", async (req, res) => {
   try {
