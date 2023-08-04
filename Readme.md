@@ -87,4 +87,4 @@ When the page is idle for a long time, user is blocked from making comments, or 
 ## Deployment
 
 - Github Link: [TechBlog](https://github.com/cckinwest/Week14-TechBlog)
-- Heroku: [TechBlog-webpage](https://week14-techblog-app-fdf9804a123f.herokuapp.com/)
+- Heroku: [TechBlog-webpage](https://week14-techblog-app-e3396b82dfd7.herokuapp.com/)
