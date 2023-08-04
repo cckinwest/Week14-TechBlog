@@ -30,9 +30,6 @@
         const expireTime = new Date(expires).getTime();
         const currentTime = new Date().getTime();
 
-        console.log(expireTime);
-        console.log(currentTime);
-
         IsExpire = (currentTime >= expireTime) 
 
         if (!IsExpire && loggedIn) {                
@@ -47,7 +44,6 @@
             if (btn.textContent === 'Add Comment') {
                 
                 const commentContent = document.querySelector(`#commentcontentInput`).value;
-                console.log(commentContent);
 
                 const response = await fetch('/api/comments/', {
                     method: 'POST',
