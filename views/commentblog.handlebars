@@ -30,6 +30,9 @@
         const expireTime = new Date(expires).getTime();
         const currentTime = new Date().getTime();
 
+        console.log(expireTime);
+        console.log(currentTime);
+
         IsExpire = (currentTime >= expireTime) 
 
         if (!IsExpire && loggedIn) {                
